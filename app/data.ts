@@ -11,9 +11,22 @@ type ContactMutation = {
   id?: string;
   first?: string;
   last?: string;
+  first_kana?: string;
+  last_kana?: string;
   avatar?: string;
   twitter?: string;
+  nationality?: string;
+  birth?: string;
+  gender?: string;
+  phonenumber?: string;
+  employee_number?: string;
+  position?: string;
+  address?: string;
+  upper_department?: string;
+  lower_department?: string;
+  career_start_date?: string;
   notes?: string;
+  description?: string;
   favorite?: boolean;
 };
 
