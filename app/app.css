@@ -321,22 +321,27 @@ i {
   flex-direction: column;
   gap: 1rem;
 }
-#contact-form > p:first-child {
+#contact-form > p:first-child,
+#contact-form > p:nth-child(2) {
   margin: 0;
   padding: 0;
 }
-#contact-form > p:first-child > :nth-child(2) {
+#contact-form > p:first-child > :nth-child(2),
+#contact-form > p:nth-child(2) > :nth-child(2) {
   margin-right: 1rem;
 }
 #contact-form > p:first-child,
+#contact-form > p:nth-child(2),
 #contact-form label {
   display: flex;
 }
 #contact-form p:first-child span,
+#contact-form p:nth-child(2) span,
 #contact-form label span {
   width: 8rem;
 }
 #contact-form p:first-child input,
+#contact-form p:nth-child(2) input,
 #contact-form label input,
 #contact-form label textarea {
   flex-grow: 2;

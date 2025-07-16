@@ -57,7 +57,6 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 }
 
-// ✅ 정수 ID 포함 구조
 const departmentOptions: Record<string, { id: number; name: string }[]> = {
   "개발본부": [
     { id: 31, name: "제1개발부" },
@@ -93,36 +92,111 @@ export default function NewUser() {
   const [lowerDept, setLowerDept] = useState("");
 
   return (
-    <div>
-      <h2>개인정보 등록</h2>
+    <Form id="user-form" method="post">
       {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
-      <Form method="post">
-        <label>이름: <input type="text" name="first_name" required /></label><br />
-        <label>성: <input type="text" name="last_name" required /></label><br />
-        <label>이름(카나): <input type="text" name="first_name_kana" /></label><br />
-        <label>성(카나): <input type="text" name="last_name_kana" /></label><br />
-        <label>이메일: <input type="email" name="email" required /></label><br />
-        <label>전화번호: <input type="tel" name="phone_number" /></label><br />
-        <label>생년월일: <input type="date" name="birth_date" /></label><br />
-        <label>국적: <input type="text" name="nationality" placeholder="Korea" /></label><br />
-
-        <fieldset>
-          <legend>성별</legend>
-          {[
-            ["1", "남성"],
-            ["2", "여성"],
-            ["3", "기타"],
-          ].map(([id, label]) => (
-            <label key={id}>
-              <input type="radio" name="gender_id" value={id} /> {label}
-            </label>
-          ))}
-        </fieldset><br />
-
-        <label>사원번호: <input type="text" name="employee_number" /></label><br />
-
-        <fieldset>
-          <legend>직책</legend>
+      <p>
+        <span>이름</span>
+        <input
+          aria-label="First name"
+          name="first_name"
+          placeholder="First"
+          type="text"
+          required
+        />
+        <input
+          aria-label="Last name"
+          name="last_name"
+          placeholder="Last"
+          type="text"
+          required
+        />
+      </p>
+      <p>
+        <span>이름(카나)</span>
+        <input
+          aria-label="First name Kana"
+          name="first_name_kana"
+          placeholder="First Kana"
+          type="text"
+        />
+        <input
+          aria-label="Last name Kana"
+          name="last_name_kana"
+          placeholder="Last Kana"
+          type="text"
+        />
+      </p>
+      <label>
+        <span>이메일</span>
+        <input
+          name="email"
+          placeholder="example@domain.com"
+          type="email"
+          required
+        />
+      </label>
+      <label>
+        <span>전화번호</span>
+        <input
+          name="phone_number"
+          placeholder="08012345678"
+          type="tel"
+        />
+      </label>
+      <label>
+        <span>국적</span>
+        <input
+          name="nationality"
+          placeholder="Korea"
+          type="text"
+        />
+      </label>
+      <label>
+        <span>생년월일</span>
+        <input
+          name="birth_date"
+          type="date"
+        />
+      </label>
+      <fieldset style={{ border: "none", padding: 0, marginBottom: "1rem" }}>
+        <legend style={{ marginBottom: "0.5rem" }}>성별</legend>
+        <div style={{ display: "flex", gap: "1rem" }}>
+          <label style={{ display: "inline-flex", alignItems: "center" }}>
+            <input
+              type="radio"
+              name="gender_id"
+              value="1"
+            />
+            <span style={{ marginLeft: "0.3rem" }}>남성</span>
+          </label>
+          <label style={{ display: "inline-flex", alignItems: "center" }}>
+            <input
+              type="radio"
+              name="gender_id"
+              value="2"
+            />
+            <span style={{ marginLeft: "0.3rem" }}>여성</span>
+          </label>
+          <label style={{ display: "inline-flex", alignItems: "center" }}>
+            <input
+              type="radio"
+              name="gender_id"
+              value="3"
+            />
+            <span style={{ marginLeft: "0.3rem" }}>기타</span>
+          </label>
+        </div>
+      </fieldset>
+      <label>
+        <span>사원번호</span>
+        <input
+          name="employee_number"
+          type="text"
+        />
+      </label>
+      <fieldset style={{ border: "none", padding: 0, marginBottom: "1rem" }}>
+        <legend style={{ marginBottom: "0.5rem", marginLeft: "-0.3rem" }}>직책</legend>
+        <div style={{ display: "flex", gap: "1rem" }}>
           {[
             ["10", "사원"],
             ["20", "주임"],
@@ -131,54 +205,83 @@ export default function NewUser() {
             ["50", "차장"],
             ["60", "부장"],
           ].map(([val, label]) => (
-            <label key={val}>
-              <input type="radio" name="position_id" value={val} /> {label}
+            <label key={val} style={{ display: "inline-flex", alignItems: "center" }}>
+              <input
+                type="radio"
+                name="position_id"
+                value={val}
+              />
+              <span style={{ marginLeft: "0.3rem" }}>{label}</span>
             </label>
           ))}
-        </fieldset><br />
-
-        <label>주소코드: <input type="text" name="address_low_code" /></label><br />
-
-        <div>
-          <label>소속본부:
+        </div>
+      </fieldset>
+      <label>
+        <span>주소코드</span>
+        <input
+          name="address_low_code"
+          type="text"
+        />
+      </label>
+      <div style={{ display: "flex", gap: "1rem", alignItems: "center", marginBottom: "1rem" }}>
+        <label>
+          <span>소속본부</span><br />
+          <select
+            name="upper_department"
+            value={upperDept}
+            onChange={(e) => {
+              setUpperDept(e.target.value);
+              setLowerDept("");
+            }}
+          >
+            <option value="">선택</option>
+            {Object.keys(departmentOptions).map((dept) => (
+              <option key={dept} value={dept}>{dept}</option>
+            ))}
+          </select>
+        </label>
+        {upperDept && (
+          <label>
+            <span>하위부서</span><br />
             <select
-              name="upper_department"
-              value={upperDept}
-              onChange={(e) => {
-                setUpperDept(e.target.value);
-                setLowerDept("");
-              }}
+              name="department_low_id"
+              value={lowerDept}
+              onChange={(e) => setLowerDept(e.target.value)}
+              required
             >
               <option value="">선택</option>
-              {Object.keys(departmentOptions).map((dept) => (
-                <option key={dept} value={dept}>{dept}</option>
+              {departmentOptions[upperDept].map((sub) => (
+                <option key={sub.id} value={sub.id}>{sub.name}</option>
               ))}
             </select>
-          </label><br />
-
-          {upperDept && (
-            <label>하위부서:
-              <select
-                name="department_low_id"
-                value={lowerDept}
-                onChange={(e) => setLowerDept(e.target.value)}
-                required
-              >
-                <option value="">선택</option>
-                {departmentOptions[upperDept].map((sub) => (
-                  <option key={sub.id} value={sub.id}>{sub.name}</option>
-                ))}
-              </select>
-            </label>
-          )}
-        </div><br />
-
-        <label>입사일: <input type="date" name="career_start_date" /></label><br />
-        <label>선호사항: <textarea name="preference" rows={3} /></label><br />
-        <label>보유 기술: <textarea name="skills" rows={5} /></label><br />
-
+          </label>
+        )}
+      </div>
+      <label>
+        <span>입사일</span>
+        <input
+          name="career_start_date"
+          type="date"
+        />
+      </label>
+      <label>
+        <span>선호사항</span>
+        <textarea
+          name="preference"
+          rows={3}
+        />
+      </label>
+      <label>
+        <span>보유 기술</span>
+        <textarea
+          name="skills"
+          rows={5}
+        />
+      </label>
+      <p>
         <button type="submit">등록하기</button>
-      </Form>
-    </div>
+        <button type="button">취소</button>
+      </p>
+    </Form>
   );
 }
